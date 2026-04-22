@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>KyrooS Manager</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="jo.css">
+    <script src="jo.js" defer></script> 
+</head>
+<body>
+
+<div class="app-container">
+        <header id="main-header">
+            <h1 id="page-title">KyrooS</h1>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
+                <span class="material-symbols-rounded" id="theme-icon">dark_mode</span>
+            </button>
+        </header>
+
+        <div id="home-content" class="content-section active-section">
+            
+            <div class="status-box" id="status-card">
+                <img src="status_stopped.png" id="status-image" class="status-image" alt="Bg">
+                
+                <div class="status-content-left">
+                    <h2 class="status-main-text" id="status-title">Stopped</h2>
+
+                    <div class="status-indicator" id="status-pid">
+                        <span class="material-symbols-rounded" style="font-size:14px;">power_settings_new</span> Inactive
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div style="background: transparent;">
+                <div class="stats-grid">
+                    <div class="info-pill">
+                        <div class="icon-row"><span class="material-symbols-rounded">info</span> VERSION</div>
+                        <span class="value" id="version">5.0 (Rozaliya)</span>
+                    </div>
+                    <div class="info-pill">
+                        <div class="icon-row"><span class="material-symbols-rounded">memory</span> RAM</div>
+                        <span class="value skeleton" id="memory-total-val">...</span>
+                    </div>
+                    <div class="info-pill">
+                        <div class="icon-row"><i class="fa-brands fa-android"></i> ANDROID</div>
+                        <span class="value skeleton" id="release-val">...</span>
+                    </div>
+                    <div class="info-pill">
+                        <div class="icon-row"><span class="material-symbols-rounded">developer_board</span> SoC</div>
+                        <span class="value skeleton" id="chipset-val">...</span>
+                    </div>
+                    <div class="info-pill" style="grid-column: span 2;">
+                        <div class="icon-row"><i class="fa-brands fa-linux"></i> KERNEL</div>
+                        <span class="value skeleton" id="kernel-val">...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-group content-box" style="padding: 0; box-shadow: var(--card-shadow);">
+                <div class="menu-item" id="threshold-card" onclick="toggleDescription('threshold-card', 'threshold-desc')">
+                    <div class="menu-icon-box"><span class="material-symbols-rounded">battery_charging_full</span></div>
+                    <div class="menu-text"><h4>Threshold</h4><p id="threshold-summary-msg">Check activation point</p></div>
+                    <span class="material-symbols-rounded menu-arrow">expand_more</span>
+                </div>
+                <div id="threshold-desc" class="hidden-desc">
+                    <div class="hidden-desc-content" id="threshold-status-text">Reading data...</div>
+                </div>
+                <div class="menu-item" id="dev-card" onclick="toggleDescription('dev-card', 'dev-desc')">
+                    <div class="menu-icon-box"><span class="material-symbols-rounded">engineering</span></div>
+                    <div class="menu-text"><h4>Developer</h4><p>View Contributors</p></div>
+                    <span class="material-symbols-rounded menu-arrow">expand_more</span>
+                </div>
+                <div id="dev-desc" class="hidden-desc">
+                    <div class="hidden-desc-content">
+                        Concept & Code by <span class="link-text" onclick="openLink('https://t.me/dcx400')">@dcx400</span><br>
+                        Maintained by <span class="link-text" onclick="openLink('https://t.me/koneko_dev')">@koneko_dev</span>
+                    </div>
+                </div>
+
+                <div class="menu-item" onclick="openLink('https://t.me/Droid_ch')">
+                    <div class="menu-icon-box"><i class="fa-brands fa-telegram" style="font-size: 20px;"></i></div>
+                    <div class="menu-text"><h4>Community</h4><p>Join discussion</p></div>
+                    <span class="material-symbols-rounded" style="color: var(--outline); margin-left: auto;">open_in_new</span>
+                </div>
+
+                <div class="menu-item" id="about-card" onclick="toggleDescription('about-card', 'about-desc')">
+                    <div class="menu-icon-box"><span class="material-symbols-rounded">help</span></div>
+                    <div class="menu-text"><h4>About</h4><p>Module information</p></div>
+                    <span class="material-symbols-rounded menu-arrow">expand_more</span>
+                </div>
+                <div id="about-desc" class="hidden-desc">
+                    <div class="hidden-desc-content">KyrooS intelligently optimizes battery and performance based on your usage habits.</div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="configuration-content" class="content-section">
+            <div class="content-box">
+                <div class="card-header"><span class="material-symbols-rounded">speed</span><h3>Refresh Rate</h3></div>
+                <p class="desc-text">Force peak screen refresh rate behavior.</p>
+                <div class="slider-container">
+                    <input type="range" id="refresh-rate-slider" min="0" max="4" step="1" value="0">
+                    <div class="slider-labels" id="refresh-rate-labels">
+                        <span>60Hz</span><span>90Hz</span><span>120Hz</span><span>144Hz</span><span>Max</span>
+                    </div>
+                </div>
+                <p style="margin-top: 8px; font-size: 13px; color: var(--md-sys-color-primary); text-align: center; font-weight: 500;">Current: <span id="current-refresh-rate-val">...</span></p>
+            </div>
+
+            <div class="content-box">
+                <div class="card-header"><span class="material-symbols-rounded">visibility_off</span><h3>Silent Trace</h3></div>
+                <p class="desc-text">Disable system logs and tracing for stealth and lighten CPU.</p>
+                <button class="btn-m3" id="silent-login-btn"><span class="material-symbols-rounded">gpp_maybe</span> Execute Stealth</button>
+            </div>
+
+            <div class="content-box">
+                <div class="card-header"><span class="material-symbols-rounded">layers</span><h3>Renderer</h3></div>
+                <p class="desc-text">Change HWUI rendering.</p>
+                <div class="utility-grid">
+                    <button class="btn-m3" data-renderer="skiagl">OpenGL</button>
+                    <button class="btn-m3" data-renderer="skiavk">Vulkan</button>
+                </div>
+                <p style="margin-top: 10px; font-size: 12px; color: var(--md-sys-color-on-surface-variant); text-align: center;">Active: <strong id="current-renderer-val" style="color:var(--md-sys-color-primary)">...</strong></p>
+            </div>
+            
+            <div class="content-box">
+                <div class="card-header"><span class="material-symbols-rounded">sports_esports</span><h3>Graphic Driver</h3></div>
+                <p class="desc-text">Set global Graphic driver preference.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn-m3" data-driver-val="0">Default</button>
+                    <button class="btn-m3" data-driver-val="1">Game</button>
+                    <button class="btn-m3" data-driver-val="2">Dev</button>
+                    <button class="btn-m3" data-driver-val="3">Off</button> 
+                </div>
+                <p style="margin-top: 10px; font-size: 12px; color: var(--md-sys-color-on-surface-variant); text-align: center;">Active: <strong id="current-driver-val" style="color:var(--md-sys-color-primary)">...</strong></p>
+            </div>
+
+            <div class="content-box">
+                <div class="card-header">
+                    <span class="material-symbols-rounded">apps_outage</span>
+                    <h3>App Stopper</h3>
+                </div>
+                <p class="desc-text">Force stop applications.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn-m3" id="btn-kill-user">
+                        <span class="material-symbols-rounded" style="font-size: 18px;">person</span> User Apps
+                    </button>
+                    <button class="btn-m3" id="btn-kill-sys">
+                        <span class="material-symbols-rounded" style="font-size: 18px;">android</span> System
+                    </button>
+                </div>
+                <button class="btn-m3" id="btn-kill-all" style="margin-top: 10px; background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container);">
+                    <span class="material-symbols-rounded">warning</span> Stop All Apps
+                </button>
+            </div>
+            <div class="content-box">
+                <div class="card-header"><span class="material-symbols-rounded">cleaning_services</span><h3>Cache Cleaner</h3></div>
+                <p class="desc-text">Auto-clear system cache.</p>
+                <div class="input-row">
+                    <span class="material-symbols-rounded" style="font-size: 24px;">sd_storage</span>
+                    <input type="number" id="cache-mb-input" class="input-m3" value="5">
+                    <span style="font-size: 14px; font-weight: 500; margin-right: auto;">GB Limit</span>
+                    <button class="btn-m3" id="btn-trim-cache" style="width: auto; height: 38px; border-radius: 20px; padding: 0 20px; margin:0;">Trim</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modules-content" class="content-section">
+            <div style="height: 100%; display: flex; flex-direction: column;">
+                
+                <div class="manager-header-area">
+                    <div class="search-box-modern">
+                        <span class="material-symbols-rounded" style="color:var(--md-sys-color-on-surface-variant); margin-right:8px;">search</span>
+                        <input type="text" id="app-search-input" class="search-input-field" placeholder="Search installed apps...">
+                        <button id="btn-scan-apps" class="scan-btn-modern">
+                            <span class="material-symbols-rounded" style="font-size:22px;">sync</span>
+                        </button>
+                    </div>
+                    <div id="app-count-info" style="text-align:center; margin-top: 8px; font-size: 11px; font-weight: 500; color: var(--md-sys-color-outline); display:none;"></div>
+                </div>
+
+                <div class="notice-banner" id="app-manager-notice">
+                    <i class="material-symbols-rounded">info</i>
+                    <div class="notice-text">
+                        <strong>Just a moment</strong><br>
+                        Fetching your installed applications. This may take a few seconds depending on the number of packages installed.
+                    </div>
+                </div>
+
+                <div id="app-list-loading" style="padding: 4px; display: none;">
+                    <div class="skeleton-loader-item"><div class="sk-icon"></div><div class="sk-text-grp"><div class="sk-line-1"></div><div class="sk-line-2"></div></div></div>
+                    <div class="skeleton-loader-item"><div class="sk-icon"></div><div class="sk-text-grp"><div class="sk-line-1"></div><div class="sk-line-2"></div></div></div>
+                    <div class="skeleton-loader-item"><div class="sk-icon"></div><div class="sk-text-grp"><div class="sk-line-1"></div><div class="sk-line-2"></div></div></div>
+                    <div class="skeleton-loader-item"><div class="sk-icon"></div><div class="sk-text-grp"><div class="sk-line-1"></div><div class="sk-line-2"></div></div></div>
+                </div>
+
+                <div class="app-list-modern" id="app-list-target">
+                    <div class="empty-state" style="padding: 60px 0; opacity: 0.6; text-align: center;">
+                        <span class="material-symbols-rounded" style="font-size: 48px; margin-bottom:12px;">apps</span>
+                        <div>Tap scan button to load apps</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="app-detail-content">
+            
+            <div class="detail-hero-section">
+                <button class="back-btn-absolute" id="btn-back-ops">
+                    <span class="material-symbols-rounded">arrow_back</span>
+                </button>
+                
+                <div class="hero-icon-container">
+                    <div class="hero-icon-bg-glow"></div>
+                    <img id="detail-app-icon" src="" class="hero-icon" alt="">
+                </div>
+                
+                <div class="hero-title" id="detail-app-name">App Name</div>
+                <div class="hero-pkg" id="detail-app-pkg">com.package.name</div>
+            </div>
+
+            <div id="app-dashboard-menu" class="bento-grid">
+                <div class="bento-card-large" onclick="openSubFeature('ops')">
+                    <div style="display:flex; flex-direction:column; justify-content: center; gap: 4px;">
+                        <div style="font-size:22px; font-weight:700;">App Ops</div>
+                        <div style="font-size:14px; opacity:0.8;">Manage permissions</div>
+                    </div>
+                    <div class="icon-circle">
+                        <span class="material-symbols-rounded" style="font-size:32px;">tune</span>
+                    </div>
+                </div>
+
+                <div class="bento-card compile" onclick="openSubFeature('compile')">
+                    <span class="material-symbols-rounded bento-icon-lg filled-icon">build_circle</span>
+                    <div>
+                        <span class="bento-label">Compile</span>
+                        <div class="bento-sub">Dex Optimizer</div>
+                    </div>
+                </div>
+
+                <div class="bento-card uninstall" onclick="openSubFeature('uninstall')">
+                    <span class="material-symbols-rounded bento-icon-lg filled-icon">delete_forever</span>
+                    <div>
+                        <span class="bento-label">Uninstall</span>
+                        <div class="bento-sub">Remove</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-ops" class="sub-view-container">
+                <div class="sub-header-simple">
+                     <span class="material-symbols-rounded filled-icon" style="color:var(--md-sys-color-primary)">tune</span>
+                     <h3>App Operations</h3>
+                </div>
+                <div class="ops-list-container" id="ops-list-target"></div>
+            </div>
+
+            <div id="view-compile" class="sub-view-container">
+                <div class="sub-header-simple">
+                     <span class="material-symbols-rounded filled-icon" style="color:var(--md-sys-color-tertiary)">build</span>
+                     <h3>Compilation Mode</h3>
+                </div>
+                <div class="ops-list-container" id="compile-list-target"></div>
+            </div>
+
+            <div id="view-uninstall" class="sub-view-container">
+                <div class="danger-zone-card">
+                    <span class="material-symbols-rounded danger-icon-lg">warning</span>
+                    <div class="danger-title">Nuclear Uninstall</div>
+                    <div class="danger-desc">
+                        This will completely remove the application and wipe all associated data. This action cannot be undone.
+                    </div>
+                    <button class="btn-nuke" onclick="openUninstallConfirmation()">
+                        <span class="material-symbols-rounded">delete</span> Confirm Removal
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-content" class="content-section">
+            <div class="content-box">
+                <div class="card-header"><span class="material-symbols-rounded">power_settings_new</span><h3>Service Control</h3></div>
+                
+                <div class="switch-container">
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="font-size: 15px; font-weight: 500;">KyrooS Daemon</span>
+                        <span id="daemon-state-text" style="font-size: 12px; color: var(--md-sys-color-outline);">Checking status...</span>
+                    </div>
+                    <label class="md-switch">
+                        <input type="checkbox" id="daemon-switch">
+                        <span class="md-slider"></span>
+                    </label>
+                </div>
+
+                <div class="switch-container" style="margin-top: 12px; padding-top: 12px;">
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="font-size: 15px; font-weight: 500;">Performance Daemon</span>
+                        <span id="perf-state-text" style="font-size: 12px; color: var(--md-sys-color-outline);">Checking status...</span>
+                    </div>
+                    <label class="md-switch">
+                        <input type="checkbox" id="perf-switch">
+                        <span class="md-slider"></span>
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="content-box">
+                 <div class="card-header"><span class="material-symbols-rounded">build</span><h3>Utilities</h3></div>
+                <p class="desc-text">System maintenance tools.</p>
+                <div class="utility-grid">
+                    <button class="btn-m3" id="reset-data-btn"><span class="material-symbols-rounded">restart_alt</span> Reset Data</button>
+                    <button class="btn-m3" id="get-log-btn"><span class="material-symbols-rounded">bug_report</span> Save Logcat</button>
+                </div>
+            </div>
+        </div>
+
+
+    <div id="op-mode-dialog" class="modal-overlay">
+        <div class="modal-content">
+            <span class="material-symbols-rounded filled-icon" style="font-size: 48px; color: var(--md-sys-color-primary); margin: 0 auto 8px auto;">tune</span>
+            <div class="modal-title" id="op-dialog-title">Select Mode</div>
+             <div class="modal-desc" id="op-dialog-desc">Modify permissions for this application.</div>
+            <button class="modal-btn btn-allow" onclick="executeOp('allow')">
+                <span class="material-symbols-rounded">check</span> Allow
+            </button>
+            <div style="display:flex; gap:10px; width:100%;">
+                <button class="modal-btn btn-ignore" onclick="executeOp('ignore')">Ignore</button>
+                <button class="modal-btn btn-deny" onclick="executeOp('deny')">Deny</button>
+            </div>
+            <button class="modal-btn btn-cancel" onclick="closeOpDialog()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="compile-dialog" class="modal-overlay">
+        <div class="modal-content">
+            <span class="material-symbols-rounded filled-icon" style="font-size: 48px; color: var(--md-sys-color-tertiary); margin: 0 auto 8px auto;">warning</span>
+            <div class="modal-title">Compile App</div>
+            <div class="modal-desc">
+                Optimization mode: <b><span id="compile-dialog-mode" style="color:var(--md-sys-color-primary);"></span></b><br>
+                This may take some time and consume battery.
+            </div>
+            <button class="modal-btn btn-confirm-compile" id="btn-confirm-compile" onclick="confirmCompile()">
+                <span class="material-symbols-rounded">play_arrow</span> Start Compile
+            </button>
+            <button class="modal-btn btn-cancel" onclick="closeCompileDialog()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="uninstall-dialog" class="modal-overlay">
+        <div class="modal-content">
+            <span class="material-symbols-rounded filled-icon" style="font-size: 48px; color: var(--md-sys-color-error); margin: 0 auto 8px auto;">delete_forever</span>
+            <div class="modal-title">Uninstall Application?</div>
+            <div class="modal-desc">
+                Remove <b><span id="uninstall-pkg-name" style="color:var(--md-sys-color-error);"></span></b>?<br>
+                All data will be lost permanently.
+            </div>
+            <div id="uninstall-logs"></div>
+            <button class="modal-btn btn-deny" id="btn-confirm-uninstall" onclick="confirmUninstall()">
+                <span class="material-symbols-rounded">delete</span> Yes, Uninstall
+            </button>
+            <button class="modal-btn btn-cancel" onclick="closeUninstallDialog()">Cancel</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav" id="main-nav">
+        <div class="nav-item active" id="nav-home"><div class="nav-icon-container"><span class="material-symbols-rounded filled-icon">home</span></div><span class="label">Home</span></div>
+        <div class="nav-item" id="nav-configuration"><div class="nav-icon-container"><span class="material-symbols-rounded">cookie</span></div><span class="label">Config</span></div>
+        <div class="nav-item" id="nav-modules"><div class="nav-icon-container"><span class="material-symbols-rounded">inventory_2</span></div><span class="label">Apps</span></div>
+        <div class="nav-item" id="nav-settings"><div class="nav-icon-container"><span class="material-symbols-rounded">settings</span></div><span class="label">Settings</span></div>
+    </nav>
+</body>
+</html>
